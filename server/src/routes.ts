@@ -65,14 +65,59 @@ routes.post('/cadastro-caminhoneiro', async (request, response) => {
         created: new Date(), 
         modified: null,
         senha: request.body.senha,
-        autenticado: 0
+        autenticado: 1
     };
     try {
         await knex('caminhoneiros').insert(dadosCadastro);
         return response.status(200).json({ message: 'Cadastro realizado com sucesso!'});
     } catch (e){
-        return ( response.json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
+        return ( response.status(400).json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
     }
 });
+
+//ATUALIZAR DADOS CAMINHONEIRO
+
+//EXCLUIR CONTA CAMINHONEIRO
+
+//CRIAR TABELA COMENTARIOS COM RELACAO CAMINHONEIROS / ESTABELECIMENTOS
+
+//CRIAR TABELA AVALIACOES COM RELACAO CAMINHONEIROS / ESTABELECIMENTOS
+
+//CADASTRAR ESTABELECIMENTO
+routes.post('/cadastro-estabelecimento', async (request, response) => {
+    const dadosCadastro = {
+        nome_estabelecimento: request.body.nome_estabelecimento, 
+        email_estabelecimento: request.body.email_estabelecimento, 
+        endereco_estabelecimento: request.body.endereco_estabelecimento, 
+        cidade_estabelecimento: request.body.cidade_estabelecimento, 
+        cnpj: request.body.cnpj, 
+        cep_estabelecimento: request.body.cep_estabelecimento, 
+        uf_estabelecimento: request.body.uf_estabelecimento, 
+        ddd_estabelecimento: request.body.ddd_estabelecimento, 
+        celular_estabelecimento: request.body.celular_estabelecimento, 
+        wifi_estabelecimento: request.body.wifi_estabelecimento, 
+        banheiro_estabelecimento: request.body.banheiro_estabelecimento, 
+        estacionamento_estabelecimento: request.body.estacionamento_estabelecimento, 
+        descricao_estabelecimento: request.body.descricao_estabelecimento, 
+        created: new Date(), 
+        modified: null,
+        senha: request.body.senha,
+        autenticado: 1
+    };
+    try {
+        await knex('estabelecimentos').insert(dadosCadastro);
+        return response.status(200).json({ message: 'Cadastro realizado com sucesso!'});
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
+    }
+});
+
+//LISTAR ESTABELECIMENTO POR ID
+
+//LISTAR ESTABELECIMENTOS PRÓXIMOS
+
+//ATUALIZAR DADOS ESTABELECIMENTO
+
+//EXCLUIR CONTA ESTABELECIMENTO
 
 export default routes;

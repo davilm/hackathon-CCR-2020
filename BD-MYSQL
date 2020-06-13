@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.9.4
 -- https://www.phpmyadmin.net/
 --
@@ -69,7 +69,9 @@ CREATE TABLE `estabelecimentos` (
   `estacionamento_estabelecimento` varchar(3) NOT NULL,
   `descricao_estabelecimento` varchar(200) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `modified` datetime DEFAULT NULL
+  `modified` datetime DEFAULT NULL,
+  `senha` varchar(20) NOT NULL,
+  `autenticado` tinyint(1) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
