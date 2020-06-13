@@ -1,0 +1,110 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Tempo de geração: 13-Jun-2020 às 00:46
+-- Versão do servidor: 5.6.41-84.1
+-- versão do PHP: 7.3.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Banco de dados: `hafne367_hackathon2020`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `caminhoneiros`
+--
+
+CREATE TABLE `caminhoneiros` (
+  `id_caminhoneiros` smallint(6) NOT NULL,
+  `nome` varchar(200) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `endereco` varchar(100) NOT NULL,
+  `cidade` varchar(50) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `cep` varchar(10) NOT NULL,
+  `uf` char(2) NOT NULL,
+  `ddd` varchar(3) NOT NULL,
+  `celular` varchar(9) NOT NULL,
+  `antt` varchar(7) NOT NULL,
+  `descricao` varchar(220) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL,
+  `senha` varchar(20) NOT NULL,
+  `autenticado` tinyint(1) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `estabelecimentos`
+--
+
+CREATE TABLE `estabelecimentos` (
+  `id_estabelecimentos` smallint(6) NOT NULL,
+  `nome_estabelecimento` varchar(200) NOT NULL,
+  `email_estabelecimento` varchar(100) NOT NULL,
+  `endereco_estabelecimento` varchar(100) NOT NULL,
+  `cidade_estabelecimento` varchar(50) NOT NULL,
+  `cnpj` varchar(18) NOT NULL,
+  `cep_estabelecimento` varchar(10) NOT NULL,
+  `uf_estabelecimento` char(2) NOT NULL,
+  `ddd_estabelecimento` varchar(3) NOT NULL,
+  `celular_estabelecimento` varchar(9) NOT NULL,
+  `wifi_estabelecimento` varchar(2) NOT NULL,
+  `banheiro_estabelecimento` varchar(3) NOT NULL,
+  `estacionamento_estabelecimento` varchar(3) NOT NULL,
+  `descricao_estabelecimento` varchar(200) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices para tabela `caminhoneiros`
+--
+ALTER TABLE `caminhoneiros`
+  ADD PRIMARY KEY (`id_caminhoneiros`);
+
+--
+-- Índices para tabela `estabelecimentos`
+--
+ALTER TABLE `estabelecimentos`
+  ADD PRIMARY KEY (`id_estabelecimentos`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `caminhoneiros`
+--
+ALTER TABLE `caminhoneiros`
+  MODIFY `id_caminhoneiros` smallint(6) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `estabelecimentos`
+--
+ALTER TABLE `estabelecimentos`
+  MODIFY `id_estabelecimentos` smallint(6) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
