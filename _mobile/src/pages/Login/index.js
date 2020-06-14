@@ -50,10 +50,10 @@ const Login = () => {
     return (
         <>
             <View style={styles.container}>
-                <Image source={require('../../assets/logo.png')} style={{ alignSelf: 'center', width: '65%', height: '30%', resizeMode: 'stretch', }} />
+                <Image source={require('../../assets/logo.png')} style={{ alignSelf: 'center', width: '70%', height: '20%', resizeMode: 'stretch', }} />
                 <View>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { marginTop: 60}]}
                         placeholder="CPF / CNPJ"
                         value={login}
                         autoCorrect={false}
@@ -70,7 +70,7 @@ const Login = () => {
                         onChangeText={setSenha}
                     />
 
-                    <View style={styles.checkboxContainer}>
+                    {/* <View style={styles.checkboxContainer}>
                         <CheckBox
                             value={checked}
                             onValueChange={handleClick}
@@ -79,17 +79,17 @@ const Login = () => {
                         <Text style={styles.label}>
                             Manter-me logado
                         </Text>
-                    </View>
+                    </View> */}
 
                     {/* Botão de Login */}
 
-                    <RectButton style={styles.button} onPress={() => handleSubmit()}>
+                    <RectButton style={[styles.button, { marginTop: 20 }]} onPress={() => handleSubmit()}>
                         <View style={styles.buttonIcon}>
                             <Text>
-                                <Icon name="arrow-right" color="#FFF" size={24} />
+                                <Icon name="arrow-right" color="black" size={24} />
                             </Text>
                         </View>
-                        <Text style={styles.buttonText}>
+                        <Text style={[styles.buttonText, { color: 'black' }]}>
                             Entrar
                         </Text>
                     </RectButton>
@@ -98,24 +98,24 @@ const Login = () => {
                 <View style={styles.iconGroup}>
 
                     {/* Esqueci a senha */}
-                    <RectButton style={styles.pointItems} >
+                    {/* <RectButton style={styles.pointItems} >
                         <Text style={[styles.buttonText, {}]}>
                             Esqueci a senha
                         </Text>
-                    </RectButton>
+                    </RectButton> */}
 
                     {/* Cadastrar */}
-                    <RectButton style={styles.pointItems}>
+                    {/* <RectButton style={styles.pointItems}>
                         <Text style={styles.buttonText}>
                             Cadastrar
                         </Text>
-                    </RectButton>
+                    </RectButton> */}
                 </View>
                 
                 <View>
                     {/* Entrar sem cadastro */}
                     <RectButton style={styles.button} onPress={() => navigation.navigate("Search")}>
-                        <Text style={styles.buttonText}>
+                        <Text style={[styles.buttonText, { color: 'black' }]}>
                             Entrar sem cadastro
                         </Text>
                     </RectButton>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
       },
     
     button: {
-        backgroundColor: '#34CB79',
+        backgroundColor: 'white',
         height: 60,
         flexDirection: 'row',
         borderRadius: 10,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     buttonIcon: {
         height: 60,
         width: 60,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#f9f6f7',
         justifyContent: 'center',
         alignItems: 'center'
     },

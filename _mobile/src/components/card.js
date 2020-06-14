@@ -33,7 +33,8 @@ export default function card({
     };
 
     useEffect(() => {
-        api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0`, {
+                 
+        api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0&lat=-25.3445817&lon=-49.2777131`, {
         // api.get('/estabelecimentos-todos', {
             // params: {
             //     nome: routeParams.nome,
@@ -44,28 +45,33 @@ export default function card({
             // }
         }).then(response => {
             console.log("response data bellow")
-            console.log(response.data);
+            console.log(typeof(response.data));
             setData(response.data);
         });
         console.log("////////////////////////////////////////////")
+
+        console.log('combustivel');
         console.log(routeParams.combustivel);
+        console.log('aberto_24h');
         console.log(routeParams.aberto_24h);
+        console.log('raio_dez_km');
         console.log(routeParams.raio_dez_km);
+        console.log('wifi');
         console.log(routeParams.wifi);
+        console.log('refeicao');
         console.log(routeParams.refeicao);
+        console.log('cafe')
         console.log(routeParams.cafe);
+        console.log('banheiro');
         console.log(routeParams.banheiro);
+        console.log('saude');
         console.log(routeParams.saude);
+
         
     }, []);
 
     return (
         <View>
-            <View style={{alignItems: 'center', marginTop: 20}}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Usuários apontam esses locais sendo</Text>
-                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>OS MAIS SEGUROS</Text>
-
-            </View>
             
             <View style={[styles.iconGroup, { marginTop: 36 }]}>
             
@@ -101,11 +107,11 @@ export default function card({
 
                             <View style={{flex: 1, flexDirection: 'row', marginTop: -5}}>
                                 <View style={{width: '14%', height: 50, backgroundColor: 'white'}}>
-                                    <Text>{item.media}</Text>
+                                    <Text>{item.mediaEstrelas}</Text>
 
                                 </View>
                                 <View style={{width: '40%', height: 50, backgroundColor: 'white'}}>
-                                    <Rating imageSize={12} readonly startingValue={item.media} style={{ alignSelf: 'flex-start', marginTop: 5 }} />
+                                    <Rating imageSize={12} readonly startingValue={item.mediaEstrelas} style={{ alignSelf: 'flex-start', marginTop: 5 }} />
 
                                 </View>
                                 <View style={{width: '46%', height: 50, backgroundColor: 'white'}}>
@@ -120,7 +126,7 @@ export default function card({
 
                                 </View>
                                 <View style={{width: '35%', height: 50, backgroundColor: 'white', marginTop: -10}}>
-                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color: 'gray' }}>{distancia}</Text>
+                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color: 'gray' }}>{item.distancia} km</Text>
 
                                 </View>
                                 <View style={{width: '35%', height: 45, backgroundColor: 'white', marginTop: -5}}>

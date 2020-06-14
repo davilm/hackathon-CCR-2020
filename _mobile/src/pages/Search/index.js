@@ -18,8 +18,8 @@ export default function Search() {
     const [selectedItems, setSelectedItems] = useState([]);
     const [data, setData] = useState([]);;
 
-    const latitude = '0';
-    const longitude = '0';
+    const latitude = '-25.3445817';
+    const longitude = '-49.2777131';
 
     const [location, setLocation] = useState();
     const [currentPosition, setCurrentPosition] = useState([0, 0]);
@@ -106,7 +106,7 @@ export default function Search() {
                 }
             break;
             case 4:
-                if(wifiestacionamento) {
+                if(wifi) {
                     setWifi(0);
                 }else {
                     setWifi(1);
@@ -241,22 +241,22 @@ export default function Search() {
 
     return (
         <View style={styles.container}>
-            <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}>
-
-                <View style={{ borderWidth: 2, borderColor: 'gray' }}>
-                    <Text>AMIGOS DO TAPETÃO</Text>
-                </View>
-                <View style={{ borderWidth: 2, borderColor: 'gray' }}>
-                    <Image source={require('../../assets/estrada.jpeg')} />
-                </View>
-
-            </View>
             
-            <View style={[styles.iconGroup, { borderTopWidth: 2, borderTopColor: 'gray' }]}>
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginBottom: 20}}>
+                <View>
+                    <View>
+                    </View>
+                </View>
+                <View>
+                    <TouchableOpacity>
+                        <Icon name="user" size={20} color='black' />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <Image source={require('../../assets/logo.png')} style={{ alignSelf: 'center', width: "80%", height: "20%"}} />
+            
+            <View style={styles.iconGroup}>
 
                 {items.map(item => (
                         <RectButton
@@ -268,7 +268,7 @@ export default function Search() {
                         >   
                             {/* <Icon name="user-astronaut" size={20} color="#A6A6A6" /> */}
                             {/* <Icon name={item.name} type="material" color='#FFF' /> */}
-                            <FontAwesome name={item.icon} size={20} color='#FFF' />
+                            <FontAwesome name={item.icon} size={20} color='black' />
                             <Text style={styles.buttonText}>{item.name}</Text>
                         </RectButton>
                 ))}
@@ -277,7 +277,7 @@ export default function Search() {
 
                 <RectButton style={styles.button} onPress={buttonPress}>
                         <View style={styles.buttonIcon}>
-                            <Icon name="arrow-right" color="#FFF" size={24} />
+                            <Icon name="arrow-right" color="black" size={24} />
                         </View>
                         <Text style={[styles.buttonText, { flex:1 }]}>
                             Pesquisar
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 36,
         paddingTop: 20 + Constants.statusBarHeight,
-        justifyContent: 'center',
+        // justifyContent: 'center',
     },
 
     iconGroup: {
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: '#34CB79',
+        backgroundColor: 'white',
         height: 60,
         flexDirection: 'row',
         borderRadius: 10,
@@ -317,14 +317,14 @@ const styles = StyleSheet.create({
     buttonText: {
         justifyContent: 'center',
         textAlign: 'center',
-        color: '#FFF',
+        color: 'black',
         fontSize: 16,
     },
 
     buttonIcon: {
         height: 60,
         width: 60,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#f9f6f7',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginTop: 8,
       width: '32%',
-      backgroundColor: '#34CB79',
+      backgroundColor: 'white',
       borderRadius: 10,
       height: 50,
       flexDirection: 'column',
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
         width: '32%',
-        backgroundColor: 'red',
+        backgroundColor: 'gray',
         borderRadius: 10,
         height: 50,
         flexDirection: 'column',

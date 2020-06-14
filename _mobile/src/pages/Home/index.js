@@ -36,9 +36,18 @@ export default function Home() {
     // }, []);
     return (
         <ScrollView style={styles.container}>
-            <TouchableOpacity onPress={() => {navigation.goBack()}}>
-                <Icon name="arrow-left" size={20} color='black' />
-            </TouchableOpacity>
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginBottom: 20}}>
+                <View>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <Icon name="arrow-left" size={20} color='black' />
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity>
+                        <Icon name="user" size={20} color='black' />
+                    </TouchableOpacity>
+                </View>
+            </View>
             <Card
                 val='3'
             />
