@@ -22,13 +22,6 @@ async function calcularMediaEstrelas(id_estabelecimento: Number) {
 //LISTAR TODOS OS CAMINHONEIROS
 routes.get('/listar-caminhoneiros', async (request, response) => {
         const userData = await knex('caminhoneiros').select('*');
-
-        // const serialized = userData.map(motorista => {
-        //    return { 
-        //        email: motorista.email,
-        //        nome: motorista.nome
-        //    };
-        // });
         return (response.json(userData));
 
 });
@@ -267,7 +260,9 @@ routes.get('/estabelecimentos', async (request, response) => {
     let limite = Number(request.query.limite)
     //offset é para fazer paginação, exemplo, se eu quiser que a busca traga os proximos 4 resultados, coloco offset=4... ele pula os 4 primeiros
     let offset = Number(request.query.offset)
-
+    let latCaminhoneiro = Number(request.query.lat); 
+    let lonCaminhoneiro = Number(request.query.lon); 
+    
     //parametros da busca
     const params = {
         combustivel: request.query.combustivel,
@@ -282,7 +277,12 @@ routes.get('/estabelecimentos', async (request, response) => {
         saude: request.query.saude
     }
     try {
-        const estabelecimentosFiltrados = await knex('estabelecimentos').where(params).limit(limite).offset(offset);
+        const estabelecimentosFiltrados = await knex('estabelecimentos').where(params).limit(limite).offset(offset).select(knex.raw('id, nome, img_url, endereco,'+ 
+                `cep, combustivel, aberto_24h, banho, raio_dez_km, wifi, estacionamento, refeicao, cafe, banheiro, saude, (6371 * acos( cos( radians(${latCaminhoneiro}))` +
+                `* cos( radians( latitude ) ) ` +
+                `* cos( radians( longitude ) - radians(${lonCaminhoneiro}) ) ` +
+                `+ sin( radians(${latCaminhoneiro}) ) ` +
+                `* sin( radians( latitude ) ) ) ) AS distancia`)).orderBy('distancia');
         if(!estabelecimentosFiltrados) {
             return (response.status(400).json({ message: 'Erro, estabelecimento inexistente!'}));
         }
@@ -296,6 +296,9 @@ routes.get('/estabelecimentos', async (request, response) => {
             }
             const qtdeAvaliacoes = Number(avaliacoes.length);
             const media = counter / qtdeAvaliacoes;
+            let latEstabelecimento = item.latitude;
+            let lonEstabelecimento = item.longitude;
+
             serializedToEdition.push({
                 id_estabelecimento: item.id,
                 img_url: String(item.img_url).split(','),  //split() pra separar por vírgula e montar uma array
@@ -311,8 +314,9 @@ routes.get('/estabelecimentos', async (request, response) => {
                 cafe: item.cafe,
                 banheiro:item.banheiro,
                 saude: item.saude,
-                media: media,
-                qtdeAvaliacoes: qtdeAvaliacoes
+                mediaEstrelas: media,
+                qtdeAvaliacoes: qtdeAvaliacoes,
+                distancia: Number(item.distancia).toFixed(1)
             });
             if (estabLength == index + 1) {
                 return (response.status(200).json(serializedToEdition));
