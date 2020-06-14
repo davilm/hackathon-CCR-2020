@@ -1,26 +1,46 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,ScrollView, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import Constants from 'expo-constants';
 import Card from '../../components/card';
+import api from '../../services/api';
 
 export default function Home() {
+    const [data, setData] = useState([]);;
+
     const navigation = useNavigation();
 
+    const route = useRoute();
+
+    const routeParams = route.params;
+
+    // useEffect(() => {
+	// 	console.log(routeParams.busca);
+    // }, [routeParams]);
+    
+    // useEffect(() => {
+    //     api.get('/estabelecimentos-todos', {
+    //         // params: {
+    //         //     nome: routeParams.nome,
+    //         //     endereco: routeParams.endereco,
+    //         //     cidade: routeParams.cidade,
+    //         //     cidade: routeParams.cidade,
+
+    //         // }
+    //     }).then(response => {
+    //         console.log(response.data);
+    //         setData(response.data);
+    //     });
+    // }, []);
     return (
         <ScrollView style={styles.container}>
             <TouchableOpacity onPress={() => {navigation.goBack()}}>
                 <Icon name="arrow-left" size={20} color='#34cb79' />
             </TouchableOpacity>
             <Card
-                classe='BR 116 - Fortaleza, CE'
-                description='Ponto de Parada'
-                data='Thu, Jun 6'
-                type='Test'
-                val='1'
-                cor="#262673"
+                val='3'
             />
 
         </ScrollView>

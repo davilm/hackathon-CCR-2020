@@ -1,58 +1,87 @@
-import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
 import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
 import { Rating } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native'
+import api from '../services/api';
 
 export default function card({
-    classe='Gestão Empresarial',
-    description='Prova',
-    data='Thu, Jun 6',
-    type='Test',
-    val=1,
-    cor='purple',
+    val=5,
+    image="https://imatecvisual.com.br/wp-content/uploads/2017/09/equipamento-para-posto-de-combustivel.jpg",
+    duracao='11 min',
+    distancia='9.0 km',
 
 }) {
-    const [value, setValue] = React.useState(parseInt(val));
-    const [rating, setRating] = React.useState(5);
+
+    
+    const [data, setData] = useState([]);;
+
     const navigation = useNavigation();
 
-    function onLong() {
-        setValue(!value);
+    const route = useRoute();
+
+    const routeParams = route.params;
+
+    const [rating, setsetRatingValue] = React.useState(parseInt(val));
+    // const [rating, setRating] = React.useState(5);
+
+    const onPress = () => {  
+        navigation.navigate('Detail', {
+            nome: data.id,
+        });
     };
 
-    function onPress() {
-        navigation.navigate("Detail");
-    }
+    useEffect(() => {
+        api.get('/estabelecimentos-todos', {
+            // params: {
+            //     nome: routeParams.nome,
+            //     endereco: routeParams.endereco,
+            //     cidade: routeParams.cidade,
+            //     cidade: routeParams.cidade,
+
+            // }
+        }).then(response => {
+            console.log(response.data);
+            setData(response.data);
+        });
+    }, []);
 
     return (
-        <TouchableOpacity onLongPress={onLong} onPress={onPress}>
-            <View style={styles.container}>
-                <View style={[ styles.box, styles.box3, { backgroundColor: cor } ]} />
-                <View style={styles.box}>
-                    <Text style={{ marginLeft: 10 }}>{description}</Text>
-                    <Text style={{ marginLeft: 10 }}>{classe}</Text>
-                </View>
-                <View style={[styles.box, styles.box2, { justifyContent: 'space-between', padding: 7 }]} >
-                    <Rating imageSize={15} readonly startingValue={rating} style={styles.rating} />
+        <View>
+            <View style={[styles.iconGroup, { borderTopWidth: 2, borderTopColor: 'gray', marginTop: 36 }]}>
+            
+            {data.map(item => (
+            
+                    <RectButton
+                        key={String(item.id)}
+                        style={[styles.pointItems, {padding:2}]}
+                        onPress={() => navigation.navigate('Detail', { id: item.id })
+                    }>
 
-                    <View style={{ flexDirection: 'row' }}>
-                        <Icon name="map-pin" size={16} color='red' />
-                        <Icon name="map" size={16} color='red' />
-                        <Icon name="airplay" size={16} color='red' />
-                        <Icon name="aperture" size={16} color='red' />
-                        <Icon name="radio" size={16} color='red' />
-                    </View>
-                </View>
-            </View>
-            <View
-                style={{
-                    borderBottomColor: 'gray',
-                    borderBottomWidth: .3,
-                    marginTop: 5
-                }}
-            />
-        </TouchableOpacity>
+                        <View style={{ width: '100%', height: '70%', resizeMode: 'stretch' }}>
+
+                            <Image source={{ uri: image}}
+                                style={{
+                                    width: '100%',
+                                    height: 130,
+                                    resizeMode: 'stretch',
+                                }}
+                            />
+                        </View>
+
+                        <View style={[styles.box, { width: '100%'}]}>
+                            <View style={{borderColor: 'brown', width: '60%'}}> 
+                                <Rating imageSize={14} readonly startingValue={rating} style={{ marginLeft: -16, marginTop: 6 }} />
+                            <Text style={{ marginLeft: 10, marginTop:8 }}>{duracao} {distancia}</Text>
+                            </View>
+                        </View>
+                    </RectButton>
+                
+                ))}
+                
+            </View>            
+        </View>
     );
 }
 
@@ -66,10 +95,10 @@ const styles = StyleSheet.create({
     },
 
     box: {
-        flex: 6,
+        flex: 1,
         height: 60,
-        justifyContent: 'center', 
-        alignItems: 'flex-start'
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
     },
 
     box2: {
@@ -81,5 +110,24 @@ const styles = StyleSheet.create({
     box3: {
         flex: .1,
         backgroundColor: 'brown',
-    },   
+    },
+
+    iconGroup: {
+        paddingVertical: 20,
+        paddingHorizontal: 0,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    pointItems: {
+        fontSize: 16,
+        marginTop: 8,
+        width: '50%',
+        // backgroundColor: '#34CB79',
+        borderRadius: 10,
+        height: 200,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
 });
