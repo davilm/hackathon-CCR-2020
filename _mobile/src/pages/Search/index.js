@@ -248,7 +248,7 @@ export default function Search() {
                     </View>
                 </View>
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                         <Icon name="user" size={20} color='black' />
                     </TouchableOpacity>
                 </View>

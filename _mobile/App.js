@@ -7,13 +7,15 @@ import Detail from './src/pages/Detail';
 import Home from './src/pages/Home';
 import Search from './src/pages/Search';
 import Login from './src/pages/Login';
+import Inicial from './src/pages/Inicial';
 
 const Stack = createStackNavigator();
 
 function App() {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
+			<Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Inicial">
+				<Stack.Screen name="Inicial" component={Inicial} />
 				<Stack.Screen name="Login" component={Login} />
 				<Stack.Screen name="Search" component={Search} />
 				<Stack.Screen name="Home" component={Home} />

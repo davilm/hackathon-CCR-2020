@@ -43,7 +43,7 @@ export default function Home() {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                         <Icon name="user" size={20} color='black' />
                     </TouchableOpacity>
                 </View>

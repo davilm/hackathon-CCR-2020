@@ -121,12 +121,12 @@ const Detail = () => {
             <View style={styles.container}>
 				<View style={{ justifyContent: 'space-between', flexDirection: 'row', marginBottom: 20}}>
 					<View>
-						<TouchableOpacity onPress={() => {navigation.goBack()}}>
+						<TouchableOpacity onPress={() => navigation.goBack()}>
 							<Icon name="arrow-left" size={20} color='black' />
 						</TouchableOpacity>
 					</View>
 					<View>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate('Login')}>
 							<Icon name="user" size={20} color='black' />
 						</TouchableOpacity>
 					</View>
