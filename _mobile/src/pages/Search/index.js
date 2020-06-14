@@ -18,8 +18,8 @@ export default function Search() {
     const [selectedItems, setSelectedItems] = useState([]);
     const [data, setData] = useState([]);;
 
-    const latitude = '-23.5726135';
-    const longitude = '-46.6730768';
+    const latitude = '0';
+    const longitude = '0';
 
     const [location, setLocation] = useState();
     const [currentPosition, setCurrentPosition] = useState([0, 0]);
@@ -29,6 +29,18 @@ export default function Search() {
     const route = useRoute();
 
     const routeParams = route.params;
+
+    
+    const [combustivel, setCombustivel] = useState(0);
+    const [aberto_24h, setAberto_24h] = useState(0);
+    const [raio_dez_km, setRaio_dez_km] = useState(0);
+    const [wifi, setWifi] = useState(0);
+    const [refeicao, setRefeicao] = useState(0);
+    const [cafe, setCafe] = useState(0);
+    const [banheiro, setBanheiro] = useState(0);
+    const [saude, setSaude] = useState(0);
+    const [estacionamento, setEstacionamento] = useState(0);
+
 
     useEffect(() => {
         async function loadPosition() {
@@ -55,6 +67,7 @@ export default function Search() {
     function handleSelectItem(id) {
         const alreadySelected = selectedItems.findIndex(item => item === id);
 
+
         if (alreadySelected >= 0) {
             const filteredItems = selectedItems.filter(item => item !== id);
 
@@ -62,6 +75,75 @@ export default function Search() {
         } else {
             setSelectedItems([ ...selectedItems, id]);
         }
+
+        switch (id) {
+            case 0:
+                if(cafe) {
+                    setCafe(0);
+                }else {
+                    setCafe(1);
+                }
+            break;
+            case 1:
+                if(refeicao) {
+                    setRefeicao(0);
+                }else {
+                    setRefeicao(1);
+                }
+            break;
+            case 2:
+                if(saude) {
+                    setSaude(0);
+                }else {
+                    setSaude(1);
+                }
+            break;
+            case 3:
+                if(combustivel) {
+                    setCombustivel(0);
+                }else {
+                    setCombustivel(1);
+                }
+            break;
+            case 4:
+                if(wifiestacionamento) {
+                    setWifi(0);
+                }else {
+                    setWifi(1);
+                }
+            break;
+            case 5:
+                if(banheiro) {
+                    setBanheiro(0);
+                }else {
+                    setBanheiro(1);
+                }
+            break;
+            case 6:
+                if(estacionamento) {
+                    setEstacionamento(0);
+                }else {
+                    setEstacionamento(1);
+                }
+            break;
+            case 7:
+                if(aberto_24h) {
+                    setAberto_24h(0);
+                }else {
+                    setAberto_24h(1);
+                }
+            break;
+            case 8:
+                if(banhoraio_dez_km) {
+                    setRaio_dez_km(0);
+                }else {
+                    setRaio_dez_km(1);
+                }
+            break;
+            default:
+                break;
+        }
+
     }
 
     // function buttonPress() {
@@ -80,26 +162,21 @@ export default function Search() {
         },
         {
             id: 2,
-            name: "mecânico",
-            icon: "wrench",
-        },
-        {
-            id: 3,
             name: "clinica",
             icon: "heartbeat",
         },
         {
-            id: 4,
+            id: 3,
             name: "combustível",
             icon: "battery-full",
         },
         {
-            id: 5,
-            name: "hospedagem",
-            icon: "bed",
+            id: 4,
+            name: "wifi",
+            icon: "wifi",
         },
         {
-            id: 6,
+            id: 5,
             name: "banheiro",
             icon: "bath",
         }
@@ -111,6 +188,15 @@ export default function Search() {
             busca: '/estabelecimentos',
             latitude: latitude,
             longitude: longitude,
+            combustivel: combustivel,
+            aberto_24h: aberto_24h,
+            raio_dez_km: raio_dez_km,
+            wifi: wifi,
+            refeicao: refeicao,
+            cafe: cafe,
+            banheiro: banheiro,
+            saude: saude,
+            estacionamento: estacionamento,
         });
 
     };

@@ -28,12 +28,13 @@ export default function card({
 
     const onPress = () => {  
         navigation.navigate('Detail', {
-            nome: data.id,
+            nome: data.id_estabelecimento,
         });
     };
 
     useEffect(() => {
-        api.get('/estabelecimentos-todos', {
+        api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0`, {
+        // api.get('/estabelecimentos-todos', {
             // params: {
             //     nome: routeParams.nome,
             //     endereco: routeParams.endereco,
@@ -42,21 +43,39 @@ export default function card({
 
             // }
         }).then(response => {
+            console.log("response data bellow")
             console.log(response.data);
             setData(response.data);
         });
+        console.log("////////////////////////////////////////////")
+        console.log(routeParams.combustivel);
+        console.log(routeParams.aberto_24h);
+        console.log(routeParams.raio_dez_km);
+        console.log(routeParams.wifi);
+        console.log(routeParams.refeicao);
+        console.log(routeParams.cafe);
+        console.log(routeParams.banheiro);
+        console.log(routeParams.saude);
+        
     }, []);
 
     return (
         <View>
-            <View style={[styles.iconGroup, { borderTopWidth: 2, borderTopColor: 'gray', marginTop: 36 }]}>
+            <View style={{alignItems: 'center', marginTop: 20}}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Usuários apontam esses locais sendo</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>OS MAIS SEGUROS</Text>
+
+            </View>
             
+            <View style={[styles.iconGroup, { marginTop: 36 }]}>
+            
+
             {data.map(item => (
             
                     <RectButton
-                        key={String(item.id)}
+                        key={String(item.id_estabelecimento)}
                         style={[styles.pointItems, {padding:2}]}
-                        onPress={() => navigation.navigate('Detail', { id: item.id })
+                        onPress={() => navigation.navigate('Detail', { id: item.id_estabelecimento })
                     }>
 
                         <View style={{ width: '100%', height: '70%', resizeMode: 'stretch' }}>
@@ -70,11 +89,51 @@ export default function card({
                             />
                         </View>
 
-                        <View style={[styles.box, { width: '100%'}]}>
-                            <View style={{borderColor: 'brown', width: '60%'}}> 
-                                <Rating imageSize={14} readonly startingValue={rating} style={{ marginLeft: -16, marginTop: 6 }} />
-                            <Text style={{ marginLeft: 10, marginTop:8 }}>{duracao} {distancia}</Text>
+                        <View style={[styles.box, { width: '100%', flexDirection: 'column'}]}>
+                            {/* <View style={{borderColor: 'brown', width: '100%'}}>
+
+                                <Text>{item.media}</Text>
+                                <Rating imageSize={12} readonly startingValue={item.media} style={{ marginLeft: -30, marginTop: 6 }} />
+                                <Text style={{fontSize: 12, color: 'blue'}}>comentarios</Text>
+
+
+                            </View> */}
+
+                            <View style={{flex: 1, flexDirection: 'row', marginTop: -5}}>
+                                <View style={{width: '14%', height: 50, backgroundColor: 'white'}}>
+                                    <Text>{item.media}</Text>
+
+                                </View>
+                                <View style={{width: '40%', height: 50, backgroundColor: 'white'}}>
+                                    <Rating imageSize={12} readonly startingValue={item.media} style={{ alignSelf: 'flex-start', marginTop: 5 }} />
+
+                                </View>
+                                <View style={{width: '46%', height: 50, backgroundColor: 'white'}}>
+                                    <Text style={{fontSize: 11, color: 'blue', marginTop: 2}}>4 comentarios</Text>
+
+                                </View>
                             </View>
+
+                            <View style={{flex: 1, flexDirection: 'row'}}>
+                                <View style={{width: '30%', height: 50, backgroundColor: 'white', marginTop: -10}}>
+                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color:'green', fontWeight: 'bold' }}>{duracao} </Text>
+
+                                </View>
+                                <View style={{width: '35%', height: 50, backgroundColor: 'white', marginTop: -10}}>
+                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color: 'gray' }}>{distancia}</Text>
+
+                                </View>
+                                <View style={{width: '35%', height: 45, backgroundColor: 'white', marginTop: -5}}>
+                                    <Icon name="map-pin" size={25} color='red' />
+
+                                </View>
+                            </View>
+
+
+                            {/* <View style={[styles.box2, { marginLeft: -20}]}>
+                            <Text style={{ marginLeft: 0, marginTop:8, fontSize: 12 }}>{duracao} {distancia}</Text>
+
+                            </View> */}
                         </View>
                     </RectButton>
                 

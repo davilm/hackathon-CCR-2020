@@ -37,7 +37,7 @@ export default function Home() {
     return (
         <ScrollView style={styles.container}>
             <TouchableOpacity onPress={() => {navigation.goBack()}}>
-                <Icon name="arrow-left" size={20} color='#34cb79' />
+                <Icon name="arrow-left" size={20} color='black' />
             </TouchableOpacity>
             <Card
                 val='3'

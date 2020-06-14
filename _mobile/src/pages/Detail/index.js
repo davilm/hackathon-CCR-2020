@@ -156,7 +156,7 @@ const Detail = () => {
 				</View>
 
 				<View style={styles.iconGroup}>
-
+          
 					<RectButton style={styles.pointItems} >
 						<FontAwesome name="coffee" size={20} color='#FFF' />
 						<Text style={styles.buttonText}>café</Text>
