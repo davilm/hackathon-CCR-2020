@@ -2,7 +2,6 @@ import express from 'express';
 import knex from './database/connection';
 
 const routes = express.Router();
-const fetch = require("node-fetch");
 
 //LISTAR TODOS OS CAMINHONEIROS
 routes.get('/listar-caminhoneiros', async (request, response) => {
@@ -18,15 +17,7 @@ routes.get('/listar-caminhoneiros', async (request, response) => {
 
 });
 
-//HOME (Ainda em construção)
-routes.get('/home', (request, response) => { //a estrutura dessa requisição é localhost:2222/home?lat=12.345&lon=12.345
-    const geolocation =  {
-        lat: request.query.lat,
-        lon: request.query.lon
-    };
-    
-    return response.status(200).json(geolocation);
-})
+//HOME (Será montado no front)
 
 //FAZER LOGIN
 routes.post('/autenticar', async (request, response) => {
@@ -158,25 +149,26 @@ routes.delete('/caminhoneiro/:id', async (request, response) => {
 
 
 //CRIAR TABELA COMENTARIOS COM RELACAO CAMINHONEIROS / ESTABELECIMENTOS
+//
 
 //CRIAR TABELA AVALIACOES COM RELACAO CAMINHONEIROS / ESTABELECIMENTOS
 
 //CADASTRAR ESTABELECIMENTO
 routes.post('/cadastro-estabelecimento', async (request, response) => {
     const dadosCadastro = {
-        nome_estabelecimento: request.body.nome_estabelecimento, 
-        email_estabelecimento: request.body.email_estabelecimento, 
-        endereco_estabelecimento: request.body.endereco_estabelecimento, 
-        cidade_estabelecimento: request.body.cidade_estabelecimento, 
+        nome: request.body.nome, 
+        email: request.body.email, 
+        endereco: request.body.endereco, 
+        cidade: request.body.cidade, 
         cnpj: request.body.cnpj, 
-        cep_estabelecimento: request.body.cep_estabelecimento, 
-        uf_estabelecimento: request.body.uf_estabelecimento, 
-        ddd_estabelecimento: request.body.ddd_estabelecimento, 
-        celular_estabelecimento: request.body.celular_estabelecimento, 
-        wifi_estabelecimento: request.body.wifi_estabelecimento, 
-        banheiro_estabelecimento: request.body.banheiro_estabelecimento, 
-        estacionamento_estabelecimento: request.body.estacionamento_estabelecimento, 
-        descricao_estabelecimento: request.body.descricao_estabelecimento, 
+        cep: request.body.cep, 
+        uf: request.body.uf, 
+        ddd: request.body.ddd, 
+        celular: request.body.celular, 
+        wifi: request.body.wifi, 
+        banheiro: request.body.banheiro, 
+        estacionamento: request.body.estacionamento, 
+        descricao: request.body.descricao, 
         created: new Date(), 
         modified: null,
         senha: request.body.senha,
@@ -190,7 +182,65 @@ routes.post('/cadastro-estabelecimento', async (request, response) => {
     }
 });
 
-//LISTAR ESTABELECIMENTO POR ID
+//LISTAR TODOS OS ESTABELECIMENTOS
+routes.get('/estabelecimentos', async (request, response) => {
+    try {
+        const todosEstabelecimentos = await knex('estabelecimentos');
+
+        if(!todosEstabelecimentos) {
+            return ( response.status(400).json({ message: 'Não há estabelecimentos cadastrados no momento.'}));
+        }
+        return response.status(200).json(todosEstabelecimentos);
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro na listagem de estabelecimentos.'}));
+    }
+
+});
+
+//LISTAR DADOS DO ESTABELECIMENTO POR ID AO SELECIONAR NA LISTA
+routes.get('/estabelecimento/:id', async (request, response) => {
+    let id = request.params.id;
+    try {
+        const estabelecimentoSelecionado = await knex('estabelecimentos').where('id', id)
+
+        const comentarios = await knex('historico_comentarios').where('id_estabelecimento', id).select('id_caminhoneiro', 'comentario');
+        let avaliacoes = await knex('avaliacao').where('id_estabelecimento', id).select('estrelas');
+        let counter = 0;
+        for (let i in avaliacoes) {
+            counter += Number(avaliacoes[i].estrelas);
+        }
+        const qtdeComentarios = avaliacoes.length;
+        const media = counter / qtdeComentarios;
+
+        if(!estabelecimentoSelecionado) {
+            return (response.status(400).json({ message: 'Erro, estabelecimento inexistente!'}));
+        }
+        const serialized = estabelecimentoSelecionado.map(item => {
+            return {
+                id_estabelecimento: item.id,
+                img_url: String(item.img_url).split(','),  //split() pra separar por vírgula e montar uma array
+                endereco: item.endereco,
+                cep: String(item.cep).replace(/^(\d{2})(\d{3})(\d{3}).*/, '$1.$2-$3'), //Regex pra colocar mascara no cep
+                combustivel: item.combustivel,
+                aberto_24h: item.aberto_24h,
+                banho: item.banho,
+                raio_dez_km: item.raio_dez_km,
+                wifi: item.wifi,
+                estacionamento: item.estacionamento,
+                refeicao: item.refeicao,
+                cafe: item.cafe,
+                banheiro:item.banheiro,
+                saude: item.saude,
+                comentarios: comentarios,
+                avaliacao: media,
+                quantidade_comentarios: qtdeComentarios
+            }
+        })
+        return (response.status(200).json(serialized));
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro na consulta, tente novamente mais tarde.'}));
+    }
+});
 
 //LISTAR ESTABELECIMENTOS PRÓXIMOS
 
