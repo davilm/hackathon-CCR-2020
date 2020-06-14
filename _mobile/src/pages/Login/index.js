@@ -21,31 +21,51 @@ import api from '../../services/api';
 const Login = () => {
     const navigation = useNavigation();
 
-    const [usuario, setUsuario] = useState("");
+    const [login, setLogin] = useState("");
     const [senha, setSenha] = useState("");
+    const [items, setItems] = useState("");
 
     const [checked, setChecked] = useState(false);
 
     const handleClick = () => setChecked(!checked)
 
-    useEffect(() => console.log('mudou'), [checked]);
+    async function handleSubmit() {        
 
+        const data = new FormData();
+        
+        data.append('cpfCnpj', login);
+        data.append('senha', senha);
+        alert('Conecte-se com a internet');
+        console.log('CONSOLE');
+        loginUser(data);
+        console.log('CONSOLE2');
+
+        const respons = await api.post('/autenticar', data);
+        
+        console.log('CONSOLE');
+        console.log(respons);
+        alert('Ponto de coleta criado!');
+    }
+    
     return (
         <>
             <View style={styles.container}>
+                <Image source={require('../../assets/logo.png')} style={{ alignSelf: 'center', width: '65%', height: '30%', resizeMode: 'stretch', }} />
                 <View>
                     <TextInput
                         style={styles.input}
-                        placeholder="Usuário"
-                        value={usuario}
+                        placeholder="CPF / CNPJ"
+                        value={login}
                         autoCorrect={false}
-                        onChangeText={setUsuario}
+                        onChangeText={setLogin}
+                        autoCapitalize="none"
                     />
 
                     <TextInput
                         style={styles.input}
-                        placeholder="Senha"
+                        placeholder="******"
                         value={senha}
+                        secureTextEntry
                         autoCorrect={false}
                         onChangeText={setSenha}
                     />
@@ -63,7 +83,7 @@ const Login = () => {
 
                     {/* Botão de Login */}
 
-                    <RectButton style={styles.button} onPress={() => navigation.navigate("Search")}>
+                    <RectButton style={styles.button} onPress={() => handleSubmit()}>
                         <View style={styles.buttonIcon}>
                             <Text>
                                 <Icon name="arrow-right" color="#FFF" size={24} />
@@ -76,12 +96,16 @@ const Login = () => {
                 </View>
 
                 <View style={styles.iconGroup}>
+
+                    {/* Esqueci a senha */}
                     <RectButton style={styles.pointItems} >
                         <Text style={[styles.buttonText, {}]}>
                             Esqueci a senha
                         </Text>
                     </RectButton>
-                    <RectButton style={styles.pointItems} >
+
+                    {/* Cadastrar */}
+                    <RectButton style={styles.pointItems}>
                         <Text style={styles.buttonText}>
                             Cadastrar
                         </Text>
@@ -89,7 +113,8 @@ const Login = () => {
                 </View>
                 
                 <View>
-                    <RectButton style={styles.button}>
+                    {/* Entrar sem cadastro */}
+                    <RectButton style={styles.button} onPress={() => navigation.navigate("Search")}>
                         <Text style={styles.buttonText}>
                             Entrar sem cadastro
                         </Text>
