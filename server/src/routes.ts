@@ -13,7 +13,7 @@ async function calcularMediaEstrelas(id_estabelecimento: Number) {
         }
         const qtdeAvaliacoes = avaliacoes.length;
         const media = counter / qtdeAvaliacoes;
-        return {media: media, qtdeAvaliacoes: qtdeAvaliacoes};
+        return [media, qtdeAvaliacoes];
     } catch(e) {
         return e;
     }
@@ -282,14 +282,21 @@ routes.get('/estabelecimentos', async (request, response) => {
         saude: request.query.saude
     }
     try {
-        const estabelecimentosFiltrados = await knex('estabelecimentos').where(params).offset(offset).limit(limite)
+        const estabelecimentosFiltrados = await knex('estabelecimentos').where(params).limit(limite).offset(offset);
         if(!estabelecimentosFiltrados) {
             return (response.status(400).json({ message: 'Erro, estabelecimento inexistente!'}));
         }
-        let serializedToEdition = {};
-        const serialized = estabelecimentosFiltrados.map(async item => {
-            const avaliacao = await calcularMediaEstrelas(item.id);
-            serializedToEdition =  {
+        let serializedToEdition: any = [];
+        const estabLength = estabelecimentosFiltrados.length;
+        estabelecimentosFiltrados.map(async (item, index) => {
+            let avaliacoes = await knex('avaliacao').where('id_estabelecimento', item.id).select('estrelas');
+            let counter = 0;
+            for (let i in avaliacoes) {
+                counter += Number(avaliacoes[i].estrelas);
+            }
+            const qtdeAvaliacoes = Number(avaliacoes.length);
+            const media = counter / qtdeAvaliacoes;
+            serializedToEdition.push({
                 id_estabelecimento: item.id,
                 img_url: String(item.img_url).split(','),  //split() pra separar por vírgula e montar uma array
                 endereco: item.endereco,
@@ -304,11 +311,13 @@ routes.get('/estabelecimentos', async (request, response) => {
                 cafe: item.cafe,
                 banheiro:item.banheiro,
                 saude: item.saude,
-                media: avaliacao.media,
-                qtdeAvaliacoes: avaliacao.qtdeAvaliacoes
-            };
+                media: media,
+                qtdeAvaliacoes: qtdeAvaliacoes
+            });
+            if (estabLength == index + 1) {
+                return (response.status(200).json(serializedToEdition));
+            }
         });
-        return (response.status(200).json(serializedToEdition));
     } catch (e){
         return ( response.status(400).json({ message: 'Erro na consulta, tente novamente mais tarde.'}));
     }
