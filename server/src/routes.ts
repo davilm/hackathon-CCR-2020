@@ -19,14 +19,9 @@ async function calcularMediaEstrelas(id_estabelecimento: Number) {
     }
 }
 
-//LISTAR TODOS OS CAMINHONEIROS
-routes.get('/listar-caminhoneiros', async (request, response) => {
-        const userData = await knex('caminhoneiros').select('*');
-        return (response.json(userData));
 
-});
+/////////////////////////////////////////////// AUTENTICAÇÃO ////////////////////////////////////////////////////
 
-//HOME (Será montado no front)
 
 //FAZER LOGIN
 routes.post('/autenticar', async (request, response) => {
@@ -69,6 +64,16 @@ routes.post('/autenticar', async (request, response) => {
     else {
         return response.status(400).json({ message: 'Senha inválida!', autenticado: false });
     }
+});
+
+
+/////////////////////////////////////////////// CAMINHONEIROS ////////////////////////////////////////////////////
+
+
+//LISTAR TODOS OS CAMINHONEIROS
+routes.get('/listar-caminhoneiros', async (request, response) => {
+    const userData = await knex('caminhoneiros').select('*');
+    return (response.json(userData));
 });
 
 //CADASTRAR CAMINHONEIRO
@@ -164,6 +169,10 @@ routes.delete('/caminhoneiro/:id', async (request, response) => {
     }
 });
 
+
+/////////////////////////////////////////////// ESTABELECIMENTOS ////////////////////////////////////////////////////
+
+
 //CADASTRAR ESTABELECIMENTO
 routes.post('/cadastro-estabelecimento', async (request, response) => {
     const dadosCadastro = {
@@ -244,8 +253,8 @@ routes.get('/estabelecimento/:id', async (request, response) => {
                 saude: item.saude,
                 comentarios: comentarios,
                 qtdeComentarios: comentarios.length,
-                avaliacao: avaliacoes.media,
-                qtdeAvaliacoes: avaliacoes.qtdeAvaliacoes
+                avaliacao: avaliacoes[0],
+                qtdeAvaliacoes: avaliacoes[1]
             }
         })
         return (response.status(200).json(serialized));
@@ -388,6 +397,61 @@ routes.put('/estabelecimento/:id', async (request, response) => {
     return response.status(200).json({ message: 'Alterações realizadas com sucesso!'});
 });
 
-//EXCLUIR CONTA ESTABELECIMENTO
+
+/////////////////////////////////////////////// COMENTARIOS ////////////////////////////////////////////////////
+
+
+//CADASTRO COMENTARIOS
+routes.post('/cadastro-comentario', async (request, response) => {
+    const dadosCadastro = {
+        nome: request.body.nome, 
+        email: request.body.email, 
+        endereco: request.body.endereco, 
+        cidade: request.body.cidade, 
+        cnpj: request.body.cnpj, 
+        cep: request.body.cep, 
+        uf: request.body.uf, 
+        ddd: request.body.ddd, 
+        celular: request.body.celular, 
+        wifi: request.body.wifi, 
+        banheiro: request.body.banheiro, 
+        estacionamento: request.body.estacionamento, 
+        descricao: request.body.descricao, 
+        senha: request.body.senha,
+        autenticado: 1,
+        img_url: request.body.img_url,
+        banho: request.body.banho,
+        combustivel: request.body.combustivel,
+        raio_dez_km: request.body.raio_dez_km,
+        aberto_24h: request.body.aberto_24h,
+        refeicao: request.body.refeicao,
+        cafe: request.body.cafe,
+        saude: request.body.saude
+    };
+    try {
+        await knex('estabelecimentos').insert(dadosCadastro);
+        return response.status(200).json({ message: 'Cadastro realizado com sucesso!'});
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
+    }
+});
+//EXCLUSAO COMENTARIO
+
+
+/////////////////////////////////////////////// AVALIACOES ////////////////////////////////////////////////////
+
+
+//CADASTRO AVALIACAO
+
+//EXCLUSAO AVALIACAO
+
+
+
+/////////////////////////////////////////////// FOTOS ////////////////////////////////////////////////////
+
+
+//UPLOAD FOTO
+
+//EXCLUSÃO FOTO
 
 export default routes;
