@@ -38,17 +38,8 @@ const Detail = () => {
 	}, []);
 	
 	useEffect(() => {
-        api.get(`/estabelecimento/${routeParams.id}`, {
-		// api.get(`/estabelecimento/2`, {
-
-            // params: {
-            //     nome: routeParams.nome,
-            //     endereco: routeParams.endereco,
-            //     cidade: routeParams.cidade,
-            //     cidade: routeParams.cidade,
-
-            // }
-        }).then(response => {
+		api.get(`/estabelecimento/${routeParams.id}`, {})
+		.then(response => {
 			console.log("")
 			console.log("")
 			console.log("RESPONSE - RESPONSE")
@@ -119,9 +110,18 @@ const Detail = () => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                 <TouchableOpacity onPress={() => {navigation.goBack()}}>
-                    <Icon name="arrow-left" size={20} color='#34cb79' />
-                </TouchableOpacity>
+				<View style={{ justifyContent: 'space-between', flexDirection: 'row', marginBottom: 20}}>
+					<View>
+						<TouchableOpacity onPress={() => navigation.goBack()}>
+							<Icon name="arrow-left" size={20} color='black' />
+						</TouchableOpacity>
+					</View>
+					<View>
+						<TouchableOpacity onPress={() => navigation.navigate('Login')}>
+							<Icon name="user" size={20} color='black' />
+						</TouchableOpacity>
+					</View>
+				</View>
 
 	{data.map(item => (
 		<View
@@ -142,12 +142,12 @@ const Detail = () => {
 					<View style={{ marginTop: 20, marginLeft: 20}}>
 
 						<Text style={{ fontWeight: 'bold', fontSize: 14}}>{item.endereco}</Text>
-						<Text style={{ marginTop: 7, fontWeight: 'bold', fontSize: 14 }}>CEP: {item.cep}</Text>
+						<Text style={{ marginTop: 7, fontSize: 14 }}>CEP: {item.cep}</Text>
 
 					</View>
 					<View style={{ marginTop: 47, marginLeft: -40, marginRight: 20, height:20, flexDirection: 'row' }}>
 						<Text style={{ fontWeight: 'bold', fontSize: 14, color: 'green' }}>11 min </Text>
-						<Text style={{ fontWeight: 'bold', fontSize: 14, color: 'gray' }}>9.0 km    </Text>
+						<Text style={{ fontWeight: 'bold', fontSize: 14, color: 'gray' }}>{item.distancia}    </Text>
 
 						<Icon name="map-pin" size={20} color='red' />
 
@@ -156,39 +156,58 @@ const Detail = () => {
 				</View>
 
 				<View style={styles.iconGroup}>
-          
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="coffee" size={20} color='#FFF' />
+
+					<RectButton
+              			style={
+							item.cafe ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="coffee" size={20} color='black' />
 						<Text style={styles.buttonText}>café</Text>
 					</RectButton>
 
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="cutlery" size={20} color='#FFF' />
+					<RectButton
+              			style={
+							item.refeicao ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="cutlery" size={20} color='black' />
 						<Text style={styles.buttonText}>refeição</Text>
 					</RectButton>
 
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="wrench" size={20} color='#FFF' />
-						<Text style={styles.buttonText}>mecânico</Text>
-					</RectButton>
-
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="heartbeat" size={20} color='#FFF' />
+					<RectButton
+              			style={
+							item.saude ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="heartbeat" size={20} color='black' />
 						<Text style={styles.buttonText}>clinica</Text>
 					</RectButton>
 
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="battery-full" size={20} color='#FFF' />
+					<RectButton
+              			style={
+							item.combustivel ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="battery-full" size={20} color='black' />
 						<Text style={styles.buttonText}>combustível</Text>
 					</RectButton>
 
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="bed" size={20} color='#FFF' />
-						<Text style={styles.buttonText}>hospedagem</Text>
+					<RectButton
+						style={
+							item.wifi ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="wifi" size={20} color='black' />
+						<Text style={styles.buttonText}>Wifi</Text>
 					</RectButton>
 
-					<RectButton style={styles.pointItems} >
-						<FontAwesome name="bath" size={20} color='#FFF' />
+					<RectButton
+						style={
+							item.refeicao ? styles.pointItems: [styles.pointItems, {backgroundColor: 'red', color: 'white'}]
+						}
+					>
+						<FontAwesome name="bath" size={20} color='black' />
 						<Text style={styles.buttonText}>banheiro</Text>
 					</RectButton>
 						
@@ -196,20 +215,16 @@ const Detail = () => {
 
 				<View style={styles.footer}>
 					<RectButton style={styles.button} onPress={() => handleWhatsapp(item.ddd, item.celular)}>
-						<FontAwesome name="whatsapp" size={20} color='#FFF' />
+						<FontAwesome name="whatsapp" size={20} color='black' />
 						<Text style={[styles.buttonText, { marginLeft: 8 }]}>WhatsApp</Text>
 					</RectButton>
 					<RectButton style={styles.button} onPress={() => openGps(location[0], location[1])}>
-						<Icon name="map-pin" size={20} color='#FFF' />
+						<Icon name="map-pin" size={20} color='black' />
 						<Text style={[styles.buttonText, { marginLeft: 8 }]}>Map</Text>
 					</RectButton>
             	</View>
 		</View>
 	 ))}
-
-                
-            
-            
             </View>
         </ScrollView>
     );
@@ -234,7 +249,6 @@ const styles = StyleSheet.create({
     pointName: {
       color: '#322153',
       fontSize: 28,
-      // fontFamily: 'Ubuntu_700Bold',
       marginTop: 24,
     },
     iconGroup: {
@@ -246,7 +260,6 @@ const styles = StyleSheet.create({
     },
     
     pointItems: {
-      // fontFamily: 'Roboto_400Regular',
       fontSize: 16,
       marginTop: 8,
       width: '32%',
@@ -260,13 +273,7 @@ const styles = StyleSheet.create({
     address: {
       marginTop: 32,
     },
-    addressTitle: {
-      color: '#322153',
-      // fontFamily: 'Roboto_500Medium',
-      fontSize: 16,
-    },
     addressContent: {
-      // fontFamily: 'Roboto_400Regular',
       lineHeight: 24,
       marginTop: 8,
       color: '#6C6C80',
@@ -284,7 +291,7 @@ const styles = StyleSheet.create({
     
     button: {
       width: '48%',
-      backgroundColor: '#34CB79',
+      backgroundColor: 'white',
       borderRadius: 10,
       height: 50,
       flexDirection: 'row',
@@ -293,7 +300,7 @@ const styles = StyleSheet.create({
     },
   
     buttonText: {
-      color: '#FFF',
+      color: 'black',
       fontSize: 16,
     },
   });

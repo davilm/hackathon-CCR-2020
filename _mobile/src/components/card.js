@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
+import { Feather as Icon } from '@expo/vector-icons';
 import { Rating } from 'react-native-elements';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import api from '../services/api';
@@ -9,6 +9,7 @@ import api from '../services/api';
 export default function card({
     val=5,
     image="https://imatecvisual.com.br/wp-content/uploads/2017/09/equipamento-para-posto-de-combustivel.jpg",
+    image2='https://minaspetro.com.br/blog/wp-content/uploads/2015/05/dicas_posto_combustivel-770x400.jpg',
     duracao='11 min',
     distancia='9.0 km',
 
@@ -23,9 +24,6 @@ export default function card({
 
     const routeParams = route.params;
 
-    const [rating, setsetRatingValue] = React.useState(parseInt(val));
-    // const [rating, setRating] = React.useState(5);
-
     const onPress = () => {  
         navigation.navigate('Detail', {
             nome: data.id_estabelecimento,
@@ -33,42 +31,44 @@ export default function card({
     };
 
     useEffect(() => {
-        api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0`, {
-        // api.get('/estabelecimentos-todos', {
-            // params: {
-            //     nome: routeParams.nome,
-            //     endereco: routeParams.endereco,
-            //     cidade: routeParams.cidade,
-            //     cidade: routeParams.cidade,
-
-            // }
-        }).then(response => {
-            console.log("response data bellow")
-            console.log(response.data);
+                 
+        api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0&lat=-25.3445817&lon=-49.2777131`, {
+        }).then(response => {;
             setData(response.data);
         });
-        console.log("////////////////////////////////////////////")
-        console.log(routeParams.combustivel);
-        console.log(routeParams.aberto_24h);
-        console.log(routeParams.raio_dez_km);
-        console.log(routeParams.wifi);
-        console.log(routeParams.refeicao);
-        console.log(routeParams.cafe);
-        console.log(routeParams.banheiro);
-        console.log(routeParams.saude);
+
         
     }, []);
 
+    const imagens = [
+        {
+            id: 0,
+            uri: "https://imatecvisual.com.br/wp-content/uploads/2017/09/equipamento-para-posto-de-combustivel.jpg",
+        },
+        {
+            id: 1,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2015/05/dicas_posto_combustivel-770x400.jpg",
+        },
+        {
+            id: 2,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2016/10/fiscalizacao-ambiental-no-posto-de-combustivel-voce-esta-preparado-770x400.jpeg",
+        },
+        {
+            id: 3,
+            uri: "https://imatecvisual.com.br/wp-content/uploads/2017/02/projeto-05.jpg",
+        },
+        {
+            id: 4,
+            uri: "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+        },
+        {
+            id: 5,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2016/10/fiscalizacao-ambiental-no-posto-de-combustivel-voce-esta-preparado-770x400.jpeg",
+        }
+    ];
     return (
         <View>
-            <View style={{alignItems: 'center', marginTop: 20}}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>Usuários apontam esses locais sendo</Text>
-                <Text style={{ fontSize: 20, fontWeight: 'bold'}}>OS MAIS SEGUROS</Text>
-
-            </View>
-            
             <View style={[styles.iconGroup, { marginTop: 36 }]}>
-            
 
             {data.map(item => (
             
@@ -80,7 +80,7 @@ export default function card({
 
                         <View style={{ width: '100%', height: '70%', resizeMode: 'stretch' }}>
 
-                            <Image source={{ uri: image}}
+                            <Image source={{ uri: imagens[item.id_estabelecimento].uri}}
                                 style={{
                                     width: '100%',
                                     height: 130,
@@ -90,22 +90,14 @@ export default function card({
                         </View>
 
                         <View style={[styles.box, { width: '100%', flexDirection: 'column'}]}>
-                            {/* <View style={{borderColor: 'brown', width: '100%'}}>
-
-                                <Text>{item.media}</Text>
-                                <Rating imageSize={12} readonly startingValue={item.media} style={{ marginLeft: -30, marginTop: 6 }} />
-                                <Text style={{fontSize: 12, color: 'blue'}}>comentarios</Text>
-
-
-                            </View> */}
 
                             <View style={{flex: 1, flexDirection: 'row', marginTop: -5}}>
                                 <View style={{width: '14%', height: 50, backgroundColor: 'white'}}>
-                                    <Text>{item.media}</Text>
+                                    <Text>{item.mediaEstrelas}</Text>
 
                                 </View>
                                 <View style={{width: '40%', height: 50, backgroundColor: 'white'}}>
-                                    <Rating imageSize={12} readonly startingValue={item.media} style={{ alignSelf: 'flex-start', marginTop: 5 }} />
+                                    <Rating imageSize={12} readonly startingValue={item.mediaEstrelas} style={{ alignSelf: 'flex-start', marginTop: 5 }} />
 
                                 </View>
                                 <View style={{width: '46%', height: 50, backgroundColor: 'white'}}>
@@ -120,7 +112,7 @@ export default function card({
 
                                 </View>
                                 <View style={{width: '35%', height: 50, backgroundColor: 'white', marginTop: -10}}>
-                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color: 'gray' }}>{distancia}</Text>
+                                    <Text style={{ marginLeft: 0, marginTop:8, fontSize: 14, color: 'gray' }}>{item.distancia} km</Text>
 
                                 </View>
                                 <View style={{width: '35%', height: 45, backgroundColor: 'white', marginTop: -5}}>
@@ -128,12 +120,6 @@ export default function card({
 
                                 </View>
                             </View>
-
-
-                            {/* <View style={[styles.box2, { marginLeft: -20}]}>
-                            <Text style={{ marginLeft: 0, marginTop:8, fontSize: 12 }}>{duracao} {distancia}</Text>
-
-                            </View> */}
                         </View>
                     </RectButton>
                 
@@ -182,7 +168,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
         width: '50%',
-        // backgroundColor: '#34CB79',
         borderRadius: 10,
         height: 200,
         flexDirection: 'column',
