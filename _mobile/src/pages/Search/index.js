@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-import { View, ScrollView, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
-// import { Icon } from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
-import api from '../../services/api';
 
 
 export default function Search() {
-    // const [item, setItems] = useState([]);
 
     const [selectedItems, setSelectedItems] = useState([]);
     const [data, setData] = useState([]);;
@@ -145,10 +141,6 @@ export default function Search() {
         }
 
     }
-
-    // function buttonPress() {
-    //     navigation.navigate('Home')
-    // }
     const items = [
         {
             id: 0,
@@ -200,44 +192,9 @@ export default function Search() {
         });
 
     };
-
-    // useEffect(() => {
-    //     api.get('/users')
-    //         .then(async response => {
-    //             const dat = await response.data;
-    //             setData(dat);
-    //             // setData(response.data);
-    //             console.log(data.city);
-    //         });
-    // }, []);
-    
-    // useEffect(() => {
-    //     api.get(`points/${routeParams.point_id}`).then(response => {
-    //     setData(response.data);
-    //     });
-    // }, []);
-
     function handleNavigateBack() {
         navigation.goBack();
     }
-
-    // useEffect(() => {
-    //     fetch(`https://climacell-microweather-v1.p.rapidapi.com/weather/realtime?unit_system=si&fields=temp&lat=${latitude}&lon=${longitude}`, {
-    //         "method": "GET",
-    //         "headers": {
-    //             "x-rapidapi-host": "climacell-microweather-v1.p.rapidapi.com",
-    //             "x-rapidapi-key": "e552d0b514msh56c28c0f6176d11p1d5bd6jsn1c6ef3505e16"
-    //         }
-    //     })
-    //     .then(async response => {
-    //         const data = await response.json();
-    //         console.log(data);
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
-        
-    // }, [latitude]);
 
     return (
         <View style={styles.container}>
@@ -265,9 +222,7 @@ export default function Search() {
                                 selectedItems.includes(item.id) ? styles.selectedItem : styles.pointItems
                             }
                             onPress={()=> handleSelectItem(item.id)}
-                        >   
-                            {/* <Icon name="user-astronaut" size={20} color="#A6A6A6" /> */}
-                            {/* <Icon name={item.name} type="material" color='#FFF' /> */}
+                        >
                             <FontAwesome name={item.icon} size={20} color='black' />
                             <Text style={styles.buttonText}>{item.name}</Text>
                         </RectButton>
@@ -293,7 +248,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 36,
         paddingTop: 20 + Constants.statusBarHeight,
-        // justifyContent: 'center',
     },
 
     iconGroup: {

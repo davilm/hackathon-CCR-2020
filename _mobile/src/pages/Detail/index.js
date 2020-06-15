@@ -38,17 +38,8 @@ const Detail = () => {
 	}, []);
 	
 	useEffect(() => {
-        api.get(`/estabelecimento/${routeParams.id}`, {
-		// api.get(`/estabelecimento/2`, {
-
-            // params: {
-            //     nome: routeParams.nome,
-            //     endereco: routeParams.endereco,
-            //     cidade: routeParams.cidade,
-            //     cidade: routeParams.cidade,
-
-            // }
-        }).then(response => {
+		api.get(`/estabelecimento/${routeParams.id}`, {})
+		.then(response => {
 			console.log("")
 			console.log("")
 			console.log("RESPONSE - RESPONSE")
@@ -232,16 +223,8 @@ const Detail = () => {
 						<Text style={[styles.buttonText, { marginLeft: 8 }]}>Map</Text>
 					</RectButton>
             	</View>
-
-				{/* {item.comentarios(item => {
-					<Text>{item.comentario}</Text>
-				})} */}
 		</View>
 	 ))}
-
-                
-            
-            
             </View>
         </ScrollView>
     );
@@ -266,7 +249,6 @@ const styles = StyleSheet.create({
     pointName: {
       color: '#322153',
       fontSize: 28,
-      // fontFamily: 'Ubuntu_700Bold',
       marginTop: 24,
     },
     iconGroup: {
@@ -278,7 +260,6 @@ const styles = StyleSheet.create({
     },
     
     pointItems: {
-      // fontFamily: 'Roboto_400Regular',
       fontSize: 16,
       marginTop: 8,
       width: '32%',
@@ -293,7 +274,6 @@ const styles = StyleSheet.create({
       marginTop: 32,
     },
     addressContent: {
-      // fontFamily: 'Roboto_400Regular',
       lineHeight: 24,
       marginTop: 8,
       color: '#6C6C80',

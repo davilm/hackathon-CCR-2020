@@ -1,23 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { RectButton } from 'react-native-gesture-handler';
 
 import { View,
     StyleSheet,
-    TouchableOpacity,
-    Text,
-    ScrollView,
     Image,
-    SafeAreaView,
-    Linking,
-    Platform,
-    TextInput,
-    CheckBox,
     TouchableWithoutFeedback
 } from 'react-native';
 import Constants from 'expo-constants';
-import api from '../../services/api';
 
 const Login = () => {
 

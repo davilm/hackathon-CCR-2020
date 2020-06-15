@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
+import { Feather as Icon } from '@expo/vector-icons';
 import { Rating } from 'react-native-elements';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import api from '../services/api';
@@ -9,6 +9,7 @@ import api from '../services/api';
 export default function card({
     val=5,
     image="https://imatecvisual.com.br/wp-content/uploads/2017/09/equipamento-para-posto-de-combustivel.jpg",
+    image2='https://minaspetro.com.br/blog/wp-content/uploads/2015/05/dicas_posto_combustivel-770x400.jpg',
     duracao='11 min',
     distancia='9.0 km',
 
@@ -23,9 +24,6 @@ export default function card({
 
     const routeParams = route.params;
 
-    const [rating, setsetRatingValue] = React.useState(parseInt(val));
-    // const [rating, setRating] = React.useState(5);
-
     const onPress = () => {  
         navigation.navigate('Detail', {
             nome: data.id_estabelecimento,
@@ -35,46 +33,42 @@ export default function card({
     useEffect(() => {
                  
         api.get(`/estabelecimentos?combustivel=${routeParams.combustivel}&aberto_24h=${routeParams.aberto_24h}&banho=${routeParams.banheiro}&raio_dez_km=${routeParams.raio_dez_km}&wifi=${routeParams.wifi}&estacionamento=${routeParams.estacionamento}&refeicao=${routeParams.refeicao}&cafe=${routeParams.cafe}&banheiro=${routeParams.banheiro}&saude=${routeParams.saude}&limite=4&offset=0&lat=-25.3445817&lon=-49.2777131`, {
-        // api.get('/estabelecimentos-todos', {
-            // params: {
-            //     nome: routeParams.nome,
-            //     endereco: routeParams.endereco,
-            //     cidade: routeParams.cidade,
-            //     cidade: routeParams.cidade,
-
-            // }
-        }).then(response => {
-            console.log("response data bellow")
-            console.log(typeof(response.data));
+        }).then(response => {;
             setData(response.data);
         });
-        console.log("////////////////////////////////////////////")
-
-        console.log('combustivel');
-        console.log(routeParams.combustivel);
-        console.log('aberto_24h');
-        console.log(routeParams.aberto_24h);
-        console.log('raio_dez_km');
-        console.log(routeParams.raio_dez_km);
-        console.log('wifi');
-        console.log(routeParams.wifi);
-        console.log('refeicao');
-        console.log(routeParams.refeicao);
-        console.log('cafe')
-        console.log(routeParams.cafe);
-        console.log('banheiro');
-        console.log(routeParams.banheiro);
-        console.log('saude');
-        console.log(routeParams.saude);
 
         
     }, []);
 
+    const imagens = [
+        {
+            id: 0,
+            uri: "https://imatecvisual.com.br/wp-content/uploads/2017/09/equipamento-para-posto-de-combustivel.jpg",
+        },
+        {
+            id: 1,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2015/05/dicas_posto_combustivel-770x400.jpg",
+        },
+        {
+            id: 2,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2016/10/fiscalizacao-ambiental-no-posto-de-combustivel-voce-esta-preparado-770x400.jpeg",
+        },
+        {
+            id: 3,
+            uri: "https://imatecvisual.com.br/wp-content/uploads/2017/02/projeto-05.jpg",
+        },
+        {
+            id: 4,
+            uri: "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+        },
+        {
+            id: 5,
+            uri: "https://minaspetro.com.br/blog/wp-content/uploads/2016/10/fiscalizacao-ambiental-no-posto-de-combustivel-voce-esta-preparado-770x400.jpeg",
+        }
+    ];
     return (
         <View>
-            
             <View style={[styles.iconGroup, { marginTop: 36 }]}>
-            
 
             {data.map(item => (
             
@@ -86,7 +80,7 @@ export default function card({
 
                         <View style={{ width: '100%', height: '70%', resizeMode: 'stretch' }}>
 
-                            <Image source={{ uri: image}}
+                            <Image source={{ uri: imagens[item.id_estabelecimento].uri}}
                                 style={{
                                     width: '100%',
                                     height: 130,
@@ -96,14 +90,6 @@ export default function card({
                         </View>
 
                         <View style={[styles.box, { width: '100%', flexDirection: 'column'}]}>
-                            {/* <View style={{borderColor: 'brown', width: '100%'}}>
-
-                                <Text>{item.media}</Text>
-                                <Rating imageSize={12} readonly startingValue={item.media} style={{ marginLeft: -30, marginTop: 6 }} />
-                                <Text style={{fontSize: 12, color: 'blue'}}>comentarios</Text>
-
-
-                            </View> */}
 
                             <View style={{flex: 1, flexDirection: 'row', marginTop: -5}}>
                                 <View style={{width: '14%', height: 50, backgroundColor: 'white'}}>
@@ -134,12 +120,6 @@ export default function card({
 
                                 </View>
                             </View>
-
-
-                            {/* <View style={[styles.box2, { marginLeft: -20}]}>
-                            <Text style={{ marginLeft: 0, marginTop:8, fontSize: 12 }}>{duracao} {distancia}</Text>
-
-                            </View> */}
                         </View>
                     </RectButton>
                 
@@ -188,7 +168,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
         width: '50%',
-        // backgroundColor: '#34CB79',
         borderRadius: 10,
         height: 200,
         flexDirection: 'column',
