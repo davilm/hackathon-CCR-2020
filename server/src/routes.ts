@@ -462,7 +462,19 @@ routes.post('/avaliar', async (request, response) => {
 });
 
 //EXCLUSAO AVALIACAO
-
+routes.delete('/apagar-avaliacao/:id', async (request, response) => {
+    let id = request.params.id;
+    try {
+        const dadosParaApagar = await knex('avaliacao').where('id_avaliacao', id).delete();
+        //apagando comentarios vinculados
+        if (!dadosParaApagar) {
+            return (response.status(400).json({ message: 'Erro, avaliacao inexistente!'}));
+        };
+        return (response.status(200).json({ message: 'avaliacao excluída com sucesso!'}));
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro na exclusão, tente novamente.'}));
+    }
+});
 
 
 /////////////////////////////////////////////// FOTOS ////////////////////////////////////////////////////
