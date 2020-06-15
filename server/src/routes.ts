@@ -52,7 +52,7 @@ routes.post('/autenticar', async (request, response) => {
     }
     else if (String(dadosBanco.senha).trim() == String(dadosLogin.senha).trim()) {
         try{
-            await knex('caminhoneiros').where(`${ tipo == 'caminhoneiro' ? 'cpf' : 'cnpj'}`, dadosLogin.cpfCnpj).update({ autenticado: 1})
+            await knex(`${tipo == 'caminhoneiro' ? 'caminhoneiros' : 'estabelecimentos'}`).where(`${ tipo == 'caminhoneiro' ? 'cpf' : 'cnpj'}`, dadosLogin.cpfCnpj).update({ autenticado: 1})
         } catch(e) {
             return ( response.status(500).json({ erro: 'Lamentamos, houve um erro: ' + e }));
         }
@@ -299,14 +299,13 @@ routes.get('/estabelecimentos', async (request, response) => {
         const estabLength = estabelecimentosFiltrados.length;
         estabelecimentosFiltrados.map(async (item, index) => {
             let avaliacoes = await knex('avaliacao').where('id_estabelecimento', item.id).select('estrelas');
+            const comentarios = await knex('historico_comentarios').where('id_estabelecimento', item.id).select('id_caminhoneiro', 'comentario');
             let counter = 0;
             for (let i in avaliacoes) {
                 counter += Number(avaliacoes[i].estrelas);
             }
             const qtdeAvaliacoes = Number(avaliacoes.length);
             const media = counter / qtdeAvaliacoes;
-            let latEstabelecimento = item.latitude;
-            let lonEstabelecimento = item.longitude;
 
             serializedToEdition.push({
                 id_estabelecimento: item.id,
@@ -325,7 +324,8 @@ routes.get('/estabelecimentos', async (request, response) => {
                 saude: item.saude,
                 mediaEstrelas: media,
                 qtdeAvaliacoes: qtdeAvaliacoes,
-                distancia: Number(item.distancia).toFixed(1)
+                distancia: Number(item.distancia).toFixed(1),
+                comentarios: comentarios
             });
             if (estabLength == index + 1) {
                 return (response.status(200).json(serializedToEdition));
@@ -402,46 +402,64 @@ routes.put('/estabelecimento/:id', async (request, response) => {
 
 
 //CADASTRO COMENTARIOS
-routes.post('/cadastro-comentario', async (request, response) => {
-    const dadosCadastro = {
-        nome: request.body.nome, 
-        email: request.body.email, 
-        endereco: request.body.endereco, 
-        cidade: request.body.cidade, 
-        cnpj: request.body.cnpj, 
-        cep: request.body.cep, 
-        uf: request.body.uf, 
-        ddd: request.body.ddd, 
-        celular: request.body.celular, 
-        wifi: request.body.wifi, 
-        banheiro: request.body.banheiro, 
-        estacionamento: request.body.estacionamento, 
-        descricao: request.body.descricao, 
-        senha: request.body.senha,
-        autenticado: 1,
-        img_url: request.body.img_url,
-        banho: request.body.banho,
-        combustivel: request.body.combustivel,
-        raio_dez_km: request.body.raio_dez_km,
-        aberto_24h: request.body.aberto_24h,
-        refeicao: request.body.refeicao,
-        cafe: request.body.cafe,
-        saude: request.body.saude
-    };
-    try {
-        await knex('estabelecimentos').insert(dadosCadastro);
-        return response.status(200).json({ message: 'Cadastro realizado com sucesso!'});
-    } catch (e){
-        return ( response.status(400).json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
+routes.post('/comentar', async (request, response) => {
+    const autenticado = request.body.autenticado;
+    if (autenticado) {
+        const dadosCadastro = {
+            id_caminhoneiro: request.body.id_caminhoneiro, 
+            id_estabelecimento: request.body.id_estabelecimento, 
+            comentario: request.body.comentario,
+            created: new Date()
+        };
+        try {
+            await knex('historico_comentarios').insert(dadosCadastro);
+            return response.status(200).json({ message: 'Cadastro realizado com sucesso!'});
+        } catch (e){
+            return ( response.status(400).json({ message: 'Erro no cadastro, por favor tente novamente e verifique seus dados.'}));
+        }
+    } else {
+        return ( response.status(400).json({ message: 'Erro de autenticação'}));
     }
 });
-//EXCLUSAO COMENTARIO
 
+//EXCLUSAO COMENTARIO
+routes.delete('/apagar-comentario/:id', async (request, response) => {
+    let id = request.params.id;
+    try {
+        const dadosParaApagar = await knex('historico_comentarios').where('id_comentario', id).delete();
+        //apagando comentarios vinculados
+        if (!dadosParaApagar) {
+            return (response.status(400).json({ message: 'Erro, comentario inexistente!'}));
+        };
+        return (response.status(200).json({ message: 'comentário excluído com sucesso!'}));
+    } catch (e){
+        return ( response.status(400).json({ message: 'Erro na exclusão, tente novamente.'}));
+    }
+});
 
 /////////////////////////////////////////////// AVALIACOES ////////////////////////////////////////////////////
 
 
 //CADASTRO AVALIACAO
+routes.post('/avaliar', async (request, response) => {
+    const autenticado = request.body.autenticado;
+    if (autenticado) {
+        const dadosCadastro = {
+            id_caminhoneiro: request.body.id_caminhoneiro, 
+            id_estabelecimento: request.body.id_estabelecimento, 
+            estrelas: request.body.estrelas,
+            created: new Date()
+        };
+        try {
+            await knex('avaliacao').insert(dadosCadastro);
+            return response.status(200).json({ message: 'avaliação realizada com sucesso!'});
+        } catch (e){
+            return ( response.status(400).json({ message: 'Erro, tente novamente.'}));
+        }
+    } else {
+        return ( response.status(400).json({ message: 'Erro de autenticação'}));
+    }
+});
 
 //EXCLUSAO AVALIACAO
 
